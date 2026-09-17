@@ -74,6 +74,7 @@ export default function Step2OAuth2OIDC({ isOIDC, hasOpenId }: { isOIDC: boolean
               { value: 'profile', label: 'profile' },
               { value: 'email',   label: 'email' },
               { value: 'phone',   label: 'phone' },
+              { value: 'roles',   label: 'roles' },
             ]}
             className="wizard-multi-select"
           />
@@ -217,6 +218,7 @@ export default function Step2OAuth2OIDC({ isOIDC, hasOpenId }: { isOIDC: boolean
                         { value: 'email',      label: 'email（邮箱）' },
                         { value: 'phone',      label: 'phone（手机号）' },
                         { value: 'roles',      label: 'roles（角色列表）' },
+                        { value: 'groups',     label: 'groups（用户组列表）' },
                         { value: 'is_staff',   label: 'is_staff（是否管理员）' },
                         { value: 'department', label: 'department（部门）' },
                         { value: 'position',   label: 'position（岗位）' },

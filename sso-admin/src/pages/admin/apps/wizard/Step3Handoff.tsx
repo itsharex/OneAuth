@@ -120,9 +120,14 @@ export default function Step3Handoff({
                 HTTPS 与末尾斜杠都不能差。
               </li>
               <li>
-                <b>用户字段映射</b>：OneAuth 在 access_token / id_token 中下发的字段为
-                <code style={codeStyle}> sub / preferred_username / name / email / phone_number / department</code>，
-                应用侧根据这些字段匹配自己的用户表。
+                <b>用户字段映射</b>：OneAuth 在 id_token / <code style={codeStyle}>/oauth/userinfo</code> 中可下发的字段为
+                <code style={codeStyle}>
+                  {Array.isArray(discovery?.claims_supported) && discovery.claims_supported.length
+                    ? discovery.claims_supported.join(' / ')
+                    : 'sub / preferred_username / name / email / phone_number / department / roles / groups / is_staff'}
+                </code>
+                ，其中 <code style={codeStyle}>groups</code>（用户组列表）随 <code style={codeStyle}>profile</code> scope 一并返回；
+                实际下发范围受应用"下发字段（OIDC claims）"白名单控制，应用侧根据这些字段匹配自己的用户表。
               </li>
               <li>
                 <b>快速交付</b>：可通过下方按钮一键复制全部配置或下载 JSON，直接发给实施人员。

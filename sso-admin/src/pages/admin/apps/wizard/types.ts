@@ -37,7 +37,7 @@ export function defaultProtocolVersion(f: ProtoFamily) {
   return PROTOCOL_VERSIONS[f][0].value;
 }
 
-export const ALL_OIDC_CLAIMS = ['name', 'email', 'phone', 'department', 'roles', 'is_staff', 'position'];
+export const ALL_OIDC_CLAIMS = ['name', 'email', 'phone', 'department', 'roles', 'groups', 'is_staff', 'position'];
 
 // 各家族在 Step2 需要校验的字段
 export const STEP2_FIELDS: Record<ProtoFamily, string[]> = {

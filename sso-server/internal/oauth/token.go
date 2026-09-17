@@ -41,6 +41,7 @@ type IDTokenClaims struct {
 	Email             string   `json:"email,omitempty"`
 	Phone             string   `json:"phone_number,omitempty"`
 	Roles             []string `json:"roles,omitempty"`
+	Groups            []string `json:"groups,omitempty"`
 	IsStaff           bool     `json:"is_staff,omitempty"`
 }
 
@@ -50,6 +51,7 @@ type UserInfo struct {
 	Email    string
 	Phone    string
 	Roles    []string
+	Groups   []string
 	IsStaff  bool
 }
 
@@ -270,6 +272,9 @@ func (ts *TokenService) IssueIDToken(subject, userID, clientID, nonce string, au
 		}
 		if pick("roles") {
 			claims.Roles = info.Roles
+		}
+		if pick("groups") {
+			claims.Groups = info.Groups
 		}
 		if pick("is_staff") {
 			claims.IsStaff = info.IsStaff

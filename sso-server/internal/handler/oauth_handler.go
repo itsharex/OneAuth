@@ -435,6 +435,14 @@ func (h *OAuthHandler) UserInfo(c *gin.Context) {
 			if pick("department") && user.Department != nil {
 				resp["department"] = user.Department.Name
 			}
+			// 用户组随 profile 一并下发，对接方无需单独请求 groups scope。
+			if pick("groups") {
+				groups := []string{}
+				for _, g := range user.Groups {
+					groups = append(groups, g.Name)
+				}
+				resp["groups"] = groups
+			}
 		case "phone":
 			if pick("phone") && user.Phone != nil {
 				resp["phone_number"] = *user.Phone
@@ -512,7 +520,7 @@ func (h *OAuthHandler) Discovery(c *gin.Context) {
 		"token_endpoint_auth_methods_supported": []string{"client_secret_basic", "client_secret_post"},
 		"claims_supported": []string{
 			"sub", "iss", "aud", "exp", "iat", "auth_time", "nonce", "acr", "amr",
-			"name", "preferred_username", "email", "email_verified", "phone_number", "department", "roles", "is_staff",
+			"name", "preferred_username", "email", "email_verified", "phone_number", "department", "roles", "groups", "is_staff",
 		},
 		"code_challenge_methods_supported": []string{"S256"},
 	})
@@ -624,6 +632,9 @@ func userToInfo(user *model.User) *oauth.UserInfo {
 	}
 	for _, r := range user.Roles {
 		info.Roles = append(info.Roles, r.Code)
+	}
+	for _, g := range user.Groups {
+		info.Groups = append(info.Groups, g.Name)
 	}
 	return info
 }

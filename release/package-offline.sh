@@ -54,9 +54,17 @@ cp sso-server/data/ip2region.xdb "release/data/ip2region.xdb"
 
 # ── Sync version into docker-compose.yml and install.sh ──
 # 匹配 v 后面所有数字和点，避免版本累积叠加（如 v1.0.18.4.3.2）
-sed -i '' "s|oneauth/backend:v[0-9.]*|oneauth/backend:v${VERSION}|g" release/docker-compose.yml
-sed -i '' "s|oneauth/gateway:v[0-9.]*|oneauth/gateway:v${VERSION}|g" release/docker-compose.yml
-sed -i '' "s|oneauth/backend:v[0-9.]*|oneauth/backend:v${VERSION}|g" release/install.sh
+# BSD/macOS sed 需要 -i ''，GNU/Linux sed 需要 -i（不带后缀），下面自适应。
+sed_inplace() {
+  if sed --version >/dev/null 2>&1; then
+    sed -i "$@"          # GNU sed
+  else
+    sed -i '' "$@"       # BSD sed (macOS)
+  fi
+}
+sed_inplace "s|oneauth/backend:v[0-9.]*|oneauth/backend:v${VERSION}|g" release/docker-compose.yml
+sed_inplace "s|oneauth/gateway:v[0-9.]*|oneauth/gateway:v${VERSION}|g" release/docker-compose.yml
+sed_inplace "s|oneauth/backend:v[0-9.]*|oneauth/backend:v${VERSION}|g" release/install.sh
 
 echo "Packaging..."
 COPYFILE_DISABLE=1 bsdtar -czf "${PKG_NAME}.tar.gz" \
